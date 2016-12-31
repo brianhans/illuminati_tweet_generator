@@ -1,7 +1,9 @@
 from flask import Flask
-import Markov.markov
+import markov.markov
 import codecs
-import threading
+from flask import render_template
+from flask import url_for
+
 
 app = Flask(__name__)
 source = 'corpus.txt'
@@ -14,8 +16,10 @@ def generate():
     if markov_dict == {}:
         generate_markov_dict()
 
-    sentence_array = Markov.markov.gen_words(markov_dict, order)
-    return ' '.join(sentence_array)
+    sentence_array = markov.markov.gen_words(markov_dict, order)
+    quote = ' '.join(sentence_array)
+    return render_template('index.html',
+                           quote = quote)
 
 def generate_markov_dict():
     global markov_dict
@@ -26,7 +30,9 @@ def generate_markov_dict():
     word_string = word_string.encode('ascii', 'ignore')
 
     word_array = word_string.split()
-    markov_dict = Markov.markov.markov_dict_gen(word_array, order)
+    markov_dict = markov.markov.markov_dict_gen(word_array, order)
 
 if __name__ == '__main__':
     app.run()
+    #app.add_url_rule('/favicon.ico',
+    #                 redirect_to=url_for('static', filename='favicon.ico'))
