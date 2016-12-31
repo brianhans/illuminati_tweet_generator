@@ -3,7 +3,7 @@ import codecs
 from hashtable import HashTable
 import random
 
-class Histogram(HashTable):
+class Histogram(dict):
 
     def __init__(self, source):
         self.types = 0
@@ -18,7 +18,7 @@ class Histogram(HashTable):
 
         word_array = word_string.split()
 
-        super(Histogram, self).__init__(20)
+        #super(Histogram, self).__init__(20)
 
         self.update(word_array)
 
@@ -29,10 +29,12 @@ class Histogram(HashTable):
 
     def append(self, item):
         try:
-            self.update_value(item, lambda count: count + 1)
+            self[item] = self[item] + 1
+            #self.update_value(item, lambda count: count + 1)
             self.types += 1
         except KeyError:
-            self.set(item, 1)
+            self[item] = 1
+            #self.set(item, 1)
         self.tokens += 1
 
 

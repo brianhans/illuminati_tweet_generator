@@ -11,14 +11,13 @@ markov_dict = {}
 @app.route('/')
 def generate():
     global markov_dict
-
-    sentence_array = Markov.markov.gen_words(markov_dict, order)
-    if len(sentence_array) > 1:
+    if markov_dict != {}:
+        sentence_array = Markov.markov.gen_words(markov_dict, order)
         return ' '.join(sentence_array)
     else:
         return 'Please wait'
 
-def generate_markov_dict(completion):
+def generate_markov_dict():
     global markov_dict
     timer = Timer()
 
@@ -30,8 +29,7 @@ def generate_markov_dict(completion):
     word_array = word_string.split()
     markov_dict = Markov.markov.markov_dict_gen(word_array, order)
     print(timer.stop())
-    completion()
 
 if __name__ == '__main__':
-    app.run()
     generate_markov_dict()
+    app.run()
