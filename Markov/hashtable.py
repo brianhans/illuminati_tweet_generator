@@ -18,7 +18,7 @@ class HashTable(object):
 
     def __repr__(self):
         """Return a string representation of this hash table"""
-        return 'HashTable({})'.format(self.length())
+        return 'HashTable({})'.format(self.keys())
 
     def _bucket_index(self, key):
         """Return the bucket index where the given key would be stored"""

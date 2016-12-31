@@ -4,7 +4,7 @@ import codecs
 
 
 app = Flask(__name__)
-source = 'test.txt'
+source = 'corpus.txt'
 order = 3
 markov_dict = {}
 
@@ -12,7 +12,8 @@ markov_dict = {}
 def generate():
     global markov_dict
 
-    return Markov.markov.gen_words(markov_dict, order)
+    sentence_array = Markov.markov.gen_words(markov_dict, order)
+    return ' '.join(sentence_array)
 
 def generate_markov_dict(completion):
     global markov_dict

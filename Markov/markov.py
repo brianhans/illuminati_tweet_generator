@@ -20,26 +20,43 @@ def markov_dict_gen(word_array, order):
     markov_dict = {}
     queue = Queue()
 
+    word_array.insert(0, '*end*')
     queue.extend(word_array[0:order])
 
     for i in range(1, len(word_array) - order + 1):
         #Shift the queue to the next word
+        print(queue)
         queue.dequeue()
         queue.enqueue(word_array[i + order - 1])
+
+        history_tuple = tuple(queue[0: len(queue) - 1])
 
         try:
             end_index = queue.index('*end*')
         except ValueError:
             end_index = -1
 
+        #if the queue has end in it, replace the other words with None because
+        #it has moved on to the next sentence
         if end_index > 0 and end_index != order - 1:
-            continue
+            history_array = []
+            for i in range(0, end_index):
+                history_array.append(None);
+            history_array.append('*end*')
+            history_tuple = tuple(history_array)
 
+        #if end is in the beginning it is a new sentence, so ignore the order
+        #and just record the first word in the sentence
         if end_index is 0:
-            history_tuple = '*end*'
-        else:
-            history_tuple = tuple(queue[0: len(queue) - 1])
+            if '*end*' in markov_dict:
+                #Add increment histogram
+                markov_dict['*end*'].update([queue[1]])
+            else:
+                #Create histogram
+                markov_dict['*end*'] = Histogram('')
+                markov_dict['*end*'].append(queue[1])
 
+        #Add the tuple into the dict followed by the next word
         if history_tuple in markov_dict:
             #Add increment histogram
             markov_dict[history_tuple].update([queue[-1]])
@@ -51,16 +68,15 @@ def markov_dict_gen(word_array, order):
     return markov_dict
 
 def gen_words(markov_dict, order):
-    word_array = []
-    # word_array.insert(0, '*start*')
-    # for _ in range(2, order):
-    #     word_array.insert(0, None)
+    word_array = ['*end*']
+
+    for _ in range(2, order):
+        word_array.insert(0, None)
     start_tuple = '*end*'#tuple(word_array)
 
     word_array.append(markov_dict[start_tuple].random())
 
-    while word_array[-1] != 'None':
-        print(word_array)
+    while word_array[-1] != '*end*':
         previous_array = []
         for i in reversed(range(1, order)):
             previous_array.append(word_array[len(word_array) - i])

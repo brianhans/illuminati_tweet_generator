@@ -21,7 +21,7 @@ class Histogram(HashTable):
         super(Histogram, self).__init__(8)
 
         self.update(word_array)
-
+        
 
     def update(self, iterable):
         for word in iterable:
