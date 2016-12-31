@@ -1,0 +1,52 @@
+body {
+    background-color: #0F1011;
+    font-family: monospace;
+}
+
+.card {
+    display: table;
+    height: 250px;
+    width: 40%;
+    margin: 0 auto;
+    margin-top: 3%;
+    background-color: white;
+    box-shadow: 0px 0px 3px black;
+    font-size: 1.3em;
+}
+
+.v-center {
+    padding: 16px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.buttons {
+    margin: 1% auto;
+    width: 40%;
+    vertical-align: bottom;
+    text-align: right;
+}
+
+button {
+    font-family: monospace;
+    border-style: none;
+    background-color: white;
+    font-size: 15px;
+    padding: 10px;
+}
+
+#heading {
+    font-size: 3em;
+    color: white;
+    magin: 0 auto;
+    text-align: center;
+}
+
+#author {
+    text-align: right;
+}
+
+#twitter {
+    background-color: #55acee;
+    color: white;
+}

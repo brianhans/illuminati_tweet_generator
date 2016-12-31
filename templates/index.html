@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Conspiracy Generator</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <body>
+
+        <div class="container-fluid" style="margin-top: 5%">
+            <h1 id="heading">Conspiracy Generator</h1>
+            <div class="card text-center ">
+                <div class="v-center ">
+                    <p id="quote ">"{{ quote }}."</p>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" id="new-quote" onclick="getQuote()"> New Quote </button>
+                <button class="btn" id="twitter" onclick="shareTwitter()"><i class="fa fa-twitter"></i></button>
+            </div>
+        </div>
+    </body>
+
+    <script src="{{ url_for( 'static', filename='index.js' ) }}"></script>
+
+</body>
+
+</html>
