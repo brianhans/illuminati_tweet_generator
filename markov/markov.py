@@ -1,5 +1,6 @@
 from histogram import Histogram
 from queue import Queue
+from timer import Timer
 
 # def markov_dict_gen(word_array):
 #     markov_dict = {}
