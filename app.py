@@ -14,6 +14,7 @@ markov_dict = {}
 def generate():
     global markov_dict
     if markov_dict == {}:
+        print('Generating new dict')
         generate_markov_dict()
 
     sentence_array = markov.markov.gen_words(markov_dict, order)

@@ -68,7 +68,6 @@ def markov_dict_gen(word_array, order):
 
 def gen_words(markov_dict, order):
     word_array = ['*end*']
-
     for _ in range(2, order):
         word_array.insert(0, None)
     start_tuple = '*end*'#tuple(word_array)
@@ -76,10 +75,12 @@ def gen_words(markov_dict, order):
     word_array.append(markov_dict[start_tuple].random())
 
     while word_array[-1] != '*end*':
+        timer = Timer()
         previous_array = []
         for i in reversed(range(1, order)):
             previous_array.append(word_array[len(word_array) - i])
         word_array.append(markov_dict[tuple(previous_array)].random())
+        print timer.stop()
 
     del word_array[-1]
 
