@@ -2,6 +2,7 @@ from flask import Flask
 import Markov.markov
 import codecs
 from Markov.timer import Timer
+import threading
 
 app = Flask(__name__)
 source = 'corpus.txt'
@@ -31,5 +32,8 @@ def generate_markov_dict():
     print(timer.stop())
 
 if __name__ == '__main__':
-    generate_markov_dict()
+    thread = threading.Thread(target=generate_markov_dict, args=())
+    thread.daemon = True                            # Daemonize thread
+    thread.start()
+
     app.run()
