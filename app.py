@@ -3,6 +3,7 @@ import markov.markov
 import codecs
 from flask import render_template
 from flask import url_for
+import sys
 
 
 app = Flask(__name__)
