@@ -1,7 +1,6 @@
 from flask import Flask
 import Markov.markov
 import codecs
-from Markov.timer import Timer
 import threading
 
 app = Flask(__name__)
@@ -20,7 +19,6 @@ def generate():
 
 def generate_markov_dict():
     global markov_dict
-    timer = Timer()
 
     word_file = codecs.open(source, encoding='utf-8')
     word_string = word_file.read()
@@ -29,11 +27,10 @@ def generate_markov_dict():
 
     word_array = word_string.split()
     markov_dict = Markov.markov.markov_dict_gen(word_array, order)
-    print(timer.stop())
 
 if __name__ == '__main__':
     thread = threading.Thread(target=generate_markov_dict, args=())
-    thread.daemon = True                            # Daemonize thread
+    thread.daemon = True
     thread.start()
 
     app.run()
