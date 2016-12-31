@@ -25,7 +25,6 @@ def markov_dict_gen(word_array, order):
 
     for i in range(1, len(word_array) - order + 1):
         #Shift the queue to the next word
-        print(queue)
         queue.dequeue()
         queue.enqueue(word_array[i + order - 1])
 

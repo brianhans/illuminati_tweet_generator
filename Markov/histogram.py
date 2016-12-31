@@ -18,10 +18,10 @@ class Histogram(HashTable):
 
         word_array = word_string.split()
 
-        super(Histogram, self).__init__(8)
+        super(Histogram, self).__init__(20)
 
         self.update(word_array)
-        
+
 
     def update(self, iterable):
         for word in iterable:
@@ -34,6 +34,7 @@ class Histogram(HashTable):
         except KeyError:
             self.set(item, 1)
         self.tokens += 1
+
 
     def unique_words(self):
         return len(self.keys())
