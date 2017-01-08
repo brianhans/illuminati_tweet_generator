@@ -19,15 +19,25 @@ class Histogram(dict):
         word_array = word_string.split()
 
         #super(Histogram, self).__init__(20)
-
         self.update(word_array)
 
 
     def update(self, iterable):
+        """Adds a list of items to the histogram
+
+        Keyword arguments:
+        iterable -- list of elements to add to the histogram
+        """
         for word in iterable:
             self.append(word)
 
     def append(self, item):
+        """Adds an item to the histogram
+
+        Keyword arguments:
+        item -- element to add to the histogram
+        """
+
         try:
             self[item] = self[item] + 1
             #self.update_value(item, lambda count: count + 1)
@@ -38,10 +48,21 @@ class Histogram(dict):
         self.tokens += 1
 
 
-    def unique_words(self):
+    def unique_elements(self):
+        """Returns the amount of unique items in the histogram
+
+        Returns:
+        unique_elements: int
+        """
+
         return len(self.keys())
 
     def most_frequent(self):
+        """Returns the element that appears most in the histogram
+
+        Returns:
+        most_frequent_element: Any
+        """
         most_used = ('', 0)
         for word, amount in self.iteritems():
             if(amount > most_used[1]):
@@ -56,17 +77,22 @@ class Histogram(dict):
             return 0
 
     def random(self):
+        """Returns a random element using a stochastic algorthim
+
+        Returns:
+        random_element: Any
+        """
         return stochastic_random(self)
 
 
 def random_element(histogram):
-    """Generates a random word from the histogram.
+    """Generates a random element from the histogram.
 
     Keyword arguments:
-    histogram -- the histogram to get the random word from
+    histogram -- the histogram to get the random element from
 
     Returns:
-    word []
+    element: Any
     """
     keys = histogram.keys()
     random_index = random.randint(0, len(keys) - 1)
@@ -81,7 +107,7 @@ def get_element(num, position, tuple_list):
     tuple_list -- a tuple of (word, starting_index [INCLUSIVE], ending_index [INCLUSIVE]])
 
     Returns:
-    word [str]
+    word: str
     """
 
     #If the number is in the range, return it (Base case)
@@ -110,7 +136,7 @@ def stochastic_random(histogram, tuple_list=None):
     tuple_list -- a tuple of (word, starting_index [INCLUSIVE], ending_index [INCLUSIVE]]) (OPTIONAL IF you provide a histogram) (default: None)
 
     Returns:
-    word [str]
+    word: str
     """
 
     if(not tuple_list):
@@ -131,7 +157,7 @@ def generate_tuple(histogram):
     histogram -- a histogram to generate a tuple_list from
 
     Return:
-    tuple_list [(word, ending_index [INCLUSIVE]])]
+    tuple_list: (word, ending_index [INCLUSIVE]])
     """
 
     index = 0

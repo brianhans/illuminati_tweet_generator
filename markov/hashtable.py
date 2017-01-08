@@ -17,7 +17,11 @@ class HashTable(object):
         self.buckets = [LinkedList() for i in range(init_size)]
 
     def __repr__(self):
-        """Return a string representation of this hash table"""
+        """Return a string representation of this hash table
+
+        Returns:
+        hashtable: str
+        """
         return 'HashTable({})'.format(self.keys())
 
     def _bucket_index(self, key):
@@ -29,7 +33,11 @@ class HashTable(object):
 
         Best case running time: Om(n) and
         Worst case running time: O(n) because we have to loop through all
-        the elements."""
+        the elements.
+
+        Returns:
+        length: int
+        """
         total = 0
 
         for bucket in self.buckets:
@@ -38,7 +46,11 @@ class HashTable(object):
         return total
 
     def contains(self, key):
-        """Return True if this hash table contains the given key, or False"""
+        """Return True if this hash table contains the given key, or False
+
+        Returns:
+        isContained: Bool
+        """
         try:
             self.get(key)
         except KeyError:
@@ -51,7 +63,14 @@ class HashTable(object):
         """Return the value associated with the given key, or raise KeyError
 
         Best case running time: Om(1) if the bucket has only one or less elements
-        Worst case running time: O(n) if all the elements are in one bucket."""
+        Worst case running time: O(n) if all the elements are in one bucket.
+
+        Returns:
+        value: Any
+
+        Throws:
+        KeyError: If key doesn't exist
+        """
 
         index = self._bucket_index(key)
         item = self.buckets[index].find(lambda item: item == key)
@@ -66,7 +85,9 @@ class HashTable(object):
         """Insert or update the given key with its associated value
 
         Best case running time: Om(1) if the bucket is empty
-        Worst case running time: O(n^2) if the bucket has many elements in it."""
+        Worst case running time: O(n^2) if the bucket has many elements in it.
+
+        """
 
         index = self._bucket_index(key)
 
@@ -78,6 +99,15 @@ class HashTable(object):
             self.buckets[index].append(KeyValuePair(key, value))
 
     def update_value(self, key, function):
+        """Update the given key by applying the function
+
+        Best case running time: Om(1) if the bucket is empty
+        Worst case running time: O(n^2) if the bucket has many elements in it.
+
+        Keyword arguments:
+        key: the key that you want to update the value
+        function: lambda function which updates the value (ie x: x + 1)
+        """
         index = self._bucket_index(key)
 
         bucket_item = self.buckets[index].find(lambda item: item == key)
@@ -92,7 +122,11 @@ class HashTable(object):
         """Delete the given key from this hash table, or raise KeyError
 
         Best case running time: Om(1) if the bucket is empty
-        Worst case running time: O(n) if the bucket has all the elements in it."""
+        Worst case running time: O(n) if the bucket has all the elements in it.
+
+        Throws:
+        KeyError: If the key doesn't exist
+        """
 
         if not self.get(key):
             raise KeyError
@@ -104,7 +138,11 @@ class HashTable(object):
         """Return a list of all keys in this hash table
 
         Best case running time: Om(n) and
-        Worst case running time: O(b+n) because it has to got through all the elements."""
+        Worst case running time: O(b+n) because it has to got through all the elements.
+
+        Returns:
+        keys: [Any]
+        """
         keys = []
 
         for bucket in self.buckets:
@@ -117,7 +155,11 @@ class HashTable(object):
         """Return a list of all values in this hash table
 
         Best case running time: Om(n) and
-        Worst case running time: O(b+n) bceause it has to got through all the elements."""
+        Worst case running time: O(b+n) bceause it has to got through all the elements.
+
+        Returns:
+        values: [Any]
+        """
         values = []
 
         for bucket in self.buckets:

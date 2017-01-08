@@ -2,95 +2,95 @@ from histogram import Histogram
 from queue import Queue
 from timer import Timer
 
-# def markov_dict_gen(word_array):
-#     markov_dict = {}
-#     word_array.append(None)
-#     word_array.insert(0, '*start*')
-#     for i in range(0, len(word_array) - 1):
-#         if word_array[i] in markov_dict:
-#             #Add increment histogram
-#             markov_dict[word_array[i]].update([word_array[i + 1]])
-#         else:
-#             #Create histogram
-#             markov_dict[word_array[i]] = Histogram(word_array[i + 1])
-#
-#     return markov_dict
+class MarkovModel:
 
+    def __init__(self, word_array, order):
+        self.order = order
+        """ Generates a markov dictionary
+        Keyword arguments:
+        word_array -- an array of words of tokens that make up the corpus
+        order -- the order of markov model that you want to create (more info: https://goo.gl/BTsSLx)
 
-def markov_dict_gen(word_array, order):
-    markov_dict = {}
-    queue = Queue()
+        """
+        markov_dict = {}
+        queue = Queue()
 
-    word_array.insert(0, '*end*')
-    queue.extend(word_array[0:order])
+        word_array.insert(0, '*end*')
+        queue.extend(word_array[0:order])
 
-    for i in range(1, len(word_array) - order + 1):
-        #Shift the queue to the next word
-        queue.dequeue()
-        queue.enqueue(word_array[i + order - 1])
+        for i in range(1, len(word_array) - order + 1):
+            #Shift the queue to the next word
+            queue.dequeue()
+            queue.enqueue(word_array[i + order - 1])
 
-        history_tuple = tuple(queue[0: len(queue) - 1])
+            history_tuple = tuple(queue[0: len(queue) - 1])
 
-        try:
-            end_index = queue.index('*end*')
-        except ValueError:
-            end_index = -1
+            try:
+                end_index = queue.index('*end*')
+            except ValueError:
+                end_index = -1
 
-        #if the queue has end in it, replace the other words with None because
-        #it has moved on to the next sentence
-        if end_index > 0 and end_index != order - 1:
-            history_array = []
-            for i in range(0, end_index):
-                history_array.append(None);
-            history_array.append('*end*')
-            history_tuple = tuple(history_array)
+            #if the queue has end in it, replace the other words with None because
+            #it has moved on to the next sentence
+            if end_index > 0 and end_index != order - 1:
+                history_array = []
+                for i in range(0, end_index):
+                    history_array.append(None);
+                history_array.append('*end*')
+                history_tuple = tuple(history_array)
 
-        #if end is in the beginning it is a new sentence, so ignore the order
-        #and just record the first word in the sentence
-        if end_index is 0:
-            if '*end*' in markov_dict:
+            #if end is in the beginning it is a new sentence, so ignore the order
+            #and just record the first word in the sentence
+            if end_index is 0:
+                followed_by = queue[1:-1]
+
+                #Don't start sentences that are shorter than the order
+                if '*end*' in followed_by:
+                    continue
+
+                if '*end*' in markov_dict:
+                    #Add increment histogram
+                    markov_dict['*end*'].update([tuple(followed_by)])
+                else:
+                    #Create histogram
+                    markov_dict['*end*'] = Histogram('')
+                    markov_dict['*end*'].append(tuple(followed_by))
+
+            #Add the tuple into the dict followed by the next word
+            if history_tuple in markov_dict:
                 #Add increment histogram
-                markov_dict['*end*'].update([queue[1]])
+                markov_dict[history_tuple].update([queue[-1]])
             else:
                 #Create histogram
-                markov_dict['*end*'] = Histogram('')
-                markov_dict['*end*'].append(queue[1])
+                markov_dict[history_tuple] = Histogram('')
+                markov_dict[history_tuple].append(queue[-1])
 
-        #Add the tuple into the dict followed by the next word
-        if history_tuple in markov_dict:
-            #Add increment histogram
-            markov_dict[history_tuple].update([queue[-1]])
-        else:
-            #Create histogram
-            markov_dict[history_tuple] = Histogram('')
-            markov_dict[history_tuple].append(queue[-1])
+            self.dict = markov_dict
 
-    return markov_dict
+    def generate_sentence_array(self):
+        """ Generates a sentence using the markov model
 
-def gen_words(markov_dict, order):
-    word_array = ['*end*']
-    for _ in range(2, order):
-        word_array.insert(0, None)
-    start_tuple = '*end*'#tuple(word_array)
+        Returns
+        sentence: [str]
+        """
 
-    word_array.append(markov_dict[start_tuple].random())
+        word_array = ['*end*']
+        start_tuple = '*end*'
 
-    while word_array[-1] != '*end*':
-        timer = Timer()
-        previous_array = []
-        for i in reversed(range(1, order)):
-            previous_array.append(word_array[len(word_array) - i])
-        word_array.append(markov_dict[tuple(previous_array)].random())
-        print timer.stop()
+        word_array.extend(self.dict[start_tuple].random())
 
-    del word_array[-1]
+        while word_array[-1] != '*end*':
+            previous_array = []
+            for i in reversed(range(1, self.order)):
+                previous_array.append(word_array[len(word_array) - i])
+            word_array.append(self.dict[tuple(previous_array)].random())
 
-    for _ in range(1, order):
+        del word_array[-1]
+
         del word_array[0]
-    return word_array
-
+        return word_array
 
 if __name__ == '__main__':
-    markov_dict = markov_dict_gen(['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish'], 3)
-    word_list = gen_words(markov_dict, 3)
+    markov = MarkovModel(['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish'], 3)
+    word_list = markov.generate_sentence()
     print(' '.join(word_list))
